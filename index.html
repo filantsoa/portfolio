@@ -1,487 +1,407 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio – Monja Filantsoa</title>
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snake Master - Mode Ariary</title>
     <style>
-      :root {
-        color-scheme: dark;
-        --bg: #050505;
-        --surface: rgba(255, 255, 255, 0.04);
-        --card: rgba(255, 255, 255, 0.08);
-        --accent: #8ef6d6;
-        --text: #f5f5f5;
-        --muted: #c9c9d4;
-        --grid: rgba(255, 255, 255, 0.03);
-        --shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-        --blur: blur(40px);
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        line-height: 1.6;
-        min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
-      }
-
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: radial-gradient(
-          circle at 20% 20%,
-          rgba(142, 246, 214, 0.15),
-          transparent 40%
-        );
-        z-index: -2;
-      }
-
-      body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background-image: linear-gradient(var(--grid) 1px, transparent 1px),
-          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-        background-size: 60px 60px;
-        opacity: 0.5;
-        z-index: -1;
-      }
-
-      header {
-        padding: 5rem clamp(1.5rem, 5vw, 6rem) 4rem;
-        display: grid;
-        gap: 2rem;
-        align-items: center;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      }
-
-      .hero-card {
-        background: linear-gradient(135deg, rgba(142, 246, 214, 0.15), transparent)
-            border-box,
-          var(--surface);
-        border: 1px solid rgba(142, 246, 214, 0.3);
-        padding: clamp(1.5rem, 3vw, 3rem);
-        border-radius: 28px;
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(30px);
-      }
-
-      .hero-card h1 {
-        font-size: clamp(2.5rem, 6vw, 4.5rem);
-        margin: 0 0 0.8rem;
-        line-height: 1.1;
-      }
-
-      .hero-card span {
-        color: var(--accent);
-        font-weight: 600;
-        font-size: 1.1rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        display: inline-block;
-        margin-bottom: 1rem;
-      }
-
-      .hero-card p {
-        color: var(--muted);
-        margin-bottom: 2rem;
-        max-width: 50ch;
-      }
-
-      .cta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-
-      .cta a {
-        text-decoration: none;
-        padding: 0.95rem 1.8rem;
-        border-radius: 999px;
-        font-weight: 600;
-        border: 1px solid transparent;
-        transition: 0.3s ease;
-      }
-
-      .cta .primary {
-        background: var(--accent);
-        color: #041e13;
-        box-shadow: 0 15px 35px rgba(142, 246, 214, 0.35);
-      }
-
-      .cta .primary:hover {
-        transform: translateY(-2px);
-      }
-
-      .cta .ghost {
-        border-color: rgba(255, 255, 255, 0.3);
-        color: var(--text);
-      }
-
-      .info-panel {
-        display: grid;
-        gap: 1.2rem;
-        padding: clamp(1.5rem, 3vw, 3rem);
-        background: var(--surface);
-        border-radius: 28px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .info-panel div {
-        display: flex;
-        flex-direction: column;
-        gap: 0.15rem;
-      }
-
-      .info-panel label {
-        color: var(--muted);
-        font-size: 0.85rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      main {
-        padding: 0 clamp(1.5rem, 5vw, 6rem) 5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 3.5rem;
-      }
-
-      section {
-        background: var(--surface);
-        padding: clamp(1.75rem, 3vw, 3rem);
-        border-radius: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        position: relative;
-        overflow: hidden;
-      }
-
-      h2 {
-        margin: 0 0 1.5rem;
-        font-size: clamp(1.8rem, 3vw, 2.4rem);
-      }
-
-      .about-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1.5rem;
-      }
-
-      .stat {
-        background: var(--card);
-        padding: 1.25rem;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-      }
-
-      .stat strong {
-        display: block;
-        font-size: 2rem;
-        margin-bottom: 0.2rem;
-        color: var(--accent);
-      }
-
-      .skills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-      }
-
-      .tag {
-        padding: 0.55rem 1.3rem;
-        border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.04);
-        font-size: 0.95rem;
-      }
-
-      .projects {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1.5rem;
-      }
-
-      .project-card {
-        background: var(--card);
-        padding: 1.5rem;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-      }
-
-      .project-card h3 {
-        margin: 0;
-        font-size: 1.35rem;
-      }
-
-      .project-card p {
-        color: var(--muted);
-        margin: 0;
-      }
-
-      .project-card .stack {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      .project-card a {
-        margin-top: auto;
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      .timeline {
-        display: grid;
-        gap: 1.5rem;
-      }
-
-      .timeline-item {
-        display: flex;
-        gap: 1.25rem;
-      }
-
-      .timeline-item::before {
-        content: "";
-        width: 2px;
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 999px;
-      }
-
-      .timeline-content {
-        background: rgba(255, 255, 255, 0.04);
-        padding: 1rem 1.5rem;
-        border-radius: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        flex: 1;
-      }
-
-      .timeline-content small {
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      footer {
-        padding: 4rem clamp(1.5rem, 5vw, 6rem) 5rem;
-        text-align: center;
-        color: var(--muted);
-      }
-
-      footer a {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      @media (max-width: 640px) {
-        header {
-          padding-top: 3.5rem;
+        /* Variables de design */
+        :root {
+            --bg-dark: #1a1a2e;
+            --canvas-bg: #16213e;
+            --snake-head: #4ecca3;
+            --snake-body: #45b293;
+            --food-color: #e94560;
+            --text-color: #ffffff;
+            --primary: #00adb5;
+            --success: #4ecca3;
+            --danger: #e94560;
+            --money: #ffd700; /* Couleur Or */
         }
-        .timeline-item {
-          flex-direction: column;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        .timeline-item::before {
-          display: none;
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-      }
+
+        .game-container {
+            position: relative;
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+            padding: 10px;
+        }
+
+        h1 {
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .user-display {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .badges-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .level-badge { background-color: var(--danger); }
+        .money-badge { 
+            background-color: #0f3460; 
+            border: 1px solid var(--money);
+            color: var(--money);
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        #gameCanvas {
+            background-color: var(--canvas-bg);
+            border: 4px solid #0f3460;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: block;
+            max-width: 100%;
+            touch-action: none;
+        }
+
+        /* Overlay */
+        #overlayMessage {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(26, 26, 46, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        #msgTitle { font-size: 1.8rem; margin-bottom: 10px; }
+        #msgBody { font-size: 1rem; margin-bottom: 20px; line-height: 1.4; white-space: pre-line; }
+
+        .input-group { margin-bottom: 20px; width: 100%; }
+        input[type="text"] {
+            width: 100%; padding: 12px; border-radius: 25px;
+            border: 2px solid var(--primary); background: var(--bg-dark);
+            color: white; font-size: 1rem; text-align: center;
+        }
+
+        /* Contrôles tactiles (D-Pad) */
+        .controls-mobile {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 10px;
+            width: 200px;
+            margin: 0 auto;
+        }
+
+        .control-btn {
+            background: #0f3460;
+            border: none;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0a2544;
+            transition: all 0.1s;
+        }
+
+        .control-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+            background: var(--primary);
+        }
+
+        .btn-up { grid-column: 2; }
+        .btn-left { grid-column: 1; grid-row: 2; }
+        .btn-down { grid-column: 2; grid-row: 2; }
+        .btn-right { grid-column: 3; grid-row: 2; }
+
+        .btn {
+            padding: 12px 25px; border-radius: 50px; border: none;
+            cursor: pointer; font-weight: bold; text-transform: uppercase;
+        }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-success { background-color: var(--success); color: #1a1a2e; }
+
+        .text-success { color: var(--success); }
+        .text-danger { color: var(--danger); }
+        .text-money { color: var(--money); }
     </style>
-  </head>
-  <body>
-    <header>
-      <div class="hero-card">
-        <span>PORTFOLIO 2025</span>
-        <h1>Monja Filantsoa</h1>
-        <p>
-          Développeur full stack, je conçois des expériences numériques
-          performantes, scalables et élégantes pour des produits qui comptent.
-          J’allie expertise backend Symfony/PHP et sens du détail côté front pour
-          livrer des solutions end-to-end.
-        </p>
-        <div class="cta">
-          <a href="#contact" class="primary">Collaborer avec moi</a>
-          <a href="#projects" class="ghost">Voir mes projets</a>
-        </div>
-      </div>
-      <div class="info-panel">
-        <div>
-          <label>Titre</label>
-          <strong>Développeur full stack</strong>
-        </div>
-        <div>
-          <label>Contact</label>
-          <strong>m.filantsoa@gmail.com</strong>
-          <span>+261 34 28 085 10</span>
-        </div>
-        <div>
-          <label>Basé à</label>
-          <strong>Antananarivo, MG</strong>
-        </div>
-      </div>
-    </header>
+</head>
+<body>
 
-    <main>
-      <section id="about">
-        <h2>À propos</h2>
-        <div class="about-grid">
-          <p>
-            Je m’appuie sur une expertise solide en architecture backend,
-            intégration d’APIs et design system pour aider les équipes à accélérer
-            leurs feuilles de route. Rigoureux sur la qualité du code, j’accorde
-            une attention particulière aux tests automatisés et à l’observabilité
-            afin d’assurer une mise en production fiable.
-          </p>
-          <div class="stat">
-            <strong>07+</strong>
-            <span>projets livrés pour des startups, agences et entreprises.</span>
-          </div>
-          <div class="stat">
-            <strong>∞</strong>
-            <span>curiosité et veille tech pour suivre les meilleures pratiques.</span>
-          </div>
+<div class="game-container">
+    <h1>Snake Master</h1>
+    
+    <div class="stats-container">
+        <div id="playerNameDisplay" class="user-display">Joueur : ---</div>
+        <div class="badges-row">
+            <div class="badge level-badge">Niveau: <span id="levelVal">1</span></div>
+            <div class="badge money-badge">Argent: <span id="scoreVal">0</span> Ar</div>
         </div>
-      </section>
+    </div>
 
-      <section id="skills">
-        <h2>Compétences clés</h2>
-        <div class="skills">
-          <span class="tag">Symfony</span>
-          <span class="tag">PHP 8+</span>
-          <span class="tag">API Platform</span>
-          <span class="tag">Git & CI/CD</span>
-          <span class="tag">Tests automatisés</span>
-          <span class="tag">Architecture hexagonale</span>
-          <span class="tag">Docker & cloud</span>
-        </div>
-      </section>
-
-      <section id="projects">
-        <h2>Projets sélectionnés</h2>
-        <div class="projects">
-          <article class="project-card">
-            <h3>Plateforme e-learning</h3>
-            <p>
-              Refonte complète d’une plateforme d’éducation avec parcours
-              personnalisés, reporting analytics et paiement sécurisé.
-            </p>
-            <span class="stack">Symfony · API Platform · Vue</span>
-            <a href="#">Voir l’étude de cas →</a>
-          </article>
-          <article class="project-card">
-            <h3>Suite interne Ops</h3>
-            <p>
-              Design et développement d’outils internes pour optimiser les flux
-              logistiques et la traçabilité en temps réel.
-            </p>
-            <span class="stack">PHP · PostgreSQL · Tailwind</span>
-            <a href="#">Voir l’étude de cas →</a>
-          </article>
-          <article class="project-card">
-            <h3>Customer Portal</h3>
-            <p>
-              Portail client intuitif, incluant authentification SSO, gestion des
-              abonnements et intégration CRM.
-            </p>
-            <span class="stack">Node · React · GraphQL</span>
-            <a href="#">Voir l’étude de cas →</a>
-          </article>
-        </div>
-      </section>
-
-      <section id="experience">
-        <h2>Expériences & méthodologie</h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-content">
-              <small>Expérience</small>
-              <h3>Développeur CRM — My-Clic</h3>
-              <p>
-                Depuis 3 ans, je contribue à la plateforme
-                <a href="https://www.my-clic.fr/" target="_blank" rel="noreferrer">my-clic.fr</a>
-                : intégration de nouveaux modules métier, optimisation des workflows
-                commerciaux et industrialisation de la stack Symfony/PHP pour des
-                déploiements rapides.
-              </p>
+    <div class="canvas-wrapper">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        
+        <div id="overlayMessage">
+            <h2 id="msgTitle">Bienvenue</h2>
+            <div id="inputArea" class="input-group">
+                <p id="msgBody">Entrez votre nom pour jouer :</p>
+                <input type="text" id="usernameInput" placeholder="Votre nom..." maxlength="12">
             </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-content">
-              <small>Projet</small>
-              <h3>Raitech Digital Agency</h3>
-              <p>
-                Collaboration ponctuelle avec
-                <a href="https://www.raitech-digital-agency.com/fr/" target="_blank" rel="noreferrer"
-                  >Raitech Digital Agency</a
-                >
-                sur un mini-projet : conception d’un micro-service marketing, intégration
-                API tierces et accompagnement UX pour fluidifier l’onboarding des clients.
-              </p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-content">
-              <small>Suivi</small>
-              <h3>Mesure & itérations</h3>
-              <p>
-                Tableaux de bord, feedback utilisateurs et tests pour améliorer le
-                produit après livraison et élargir les cas d’usage.
-              </p>
-            </div>
-          </div>
+            <button id="btnAction" class="btn btn-success">Jouer</button>
         </div>
-      </section>
+    </div>
 
-      <section id="contact">
-        <h2>Restons en contact</h2>
-        <p>
-          Disponible pour missions freelance, consulting ou collaborations
-          long-terme. Parlez-moi de votre prochain défi.
-        </p>
-        <div class="skills">
-          <span class="tag">📧 m.filantsoa@gmail.com</span>
-          <span class="tag">📱 +261 34 28 085 10</span>
-          <span class="tag">LinkedIn · à venir</span>
-          <span class="tag">GitHub · à venir</span>
-        </div>
-      </section>
-    </main>
+    <div class="controls-mobile">
+        <button class="control-btn btn-up" onmousedown="setDir(0,-1)" ontouchstart="setDir(0,-1)">▲</button>
+        <button class="control-btn btn-left" onmousedown="setDir(-1,0)" ontouchstart="setDir(-1,0)">◀</button>
+        <button class="control-btn btn-down" onmousedown="setDir(0,1)" ontouchstart="setDir(0,1)">▼</button>
+        <button class="control-btn btn-right" onmousedown="setDir(1,0)" ontouchstart="setDir(1,0)">▶</button>
+    </div>
+</div>
 
-    <footer>
-      <p>
-        © <span id="year"></span> Monja Filantsoa — Conçu avec passion et un soupçon
-        de pixel perfect.
-      </p>
-    </footer>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreElement = document.getElementById('scoreVal');
+    const levelElement = document.getElementById('levelVal');
+    const overlay = document.getElementById('overlayMessage');
+    const msgTitle = document.getElementById('msgTitle');
+    const msgBody = document.getElementById('msgBody');
+    const inputArea = document.getElementById('inputArea');
+    const usernameInput = document.getElementById('usernameInput');
+    const playerNameDisplay = document.getElementById('playerNameDisplay');
+    const btnAction = document.getElementById('btnAction');
 
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
-  </body>
+    const gridSize = 20;
+    const tileCount = canvas.width / gridSize;
+    
+    let username = "";
+    let snake = [];
+    let foods = []; 
+    let dx = 0;
+    let dy = 0;
+    let score = 0; 
+    let currentLevel = 1;
+    let foodToEatInLevel = 5;
+    
+    let gameRunning = false;
+    let gameLoop;
+    let speed = 150;
+
+    btnAction.onclick = () => {
+        const val = usernameInput.value.trim();
+        username = val === "" ? "Anonyme" : val;
+        playerNameDisplay.innerText = `Joueur : ${username}`;
+        startLevel(1);
+    };
+
+    function setDir(newDx, newDy) {
+        if (!gameRunning) return;
+        if (newDx === -dx && newDx !== 0) return;
+        if (newDy === -dy && newDy !== 0) return;
+        dx = newDx;
+        dy = newDy;
+    }
+
+    function startLevel(level) {
+        currentLevel = level;
+        foodToEatInLevel = 5 * level;
+        foods = [];
+        
+        if (level === 1) {
+            snake = [{x: 10, y: 10}];
+            score = 0;
+            scoreElement.innerText = "0";
+        } else {
+            const oldSnake = [...snake];
+            const offset = { x: 10 - oldSnake[0].x, y: 10 - oldSnake[0].y };
+            snake = oldSnake.map(part => ({
+                x: (part.x + offset.x + tileCount) % tileCount,
+                y: (part.y + offset.y + tileCount) % tileCount
+            }));
+        }
+        
+        for(let i = 0; i < foodToEatInLevel; i++) generateFood();
+        
+        levelElement.innerText = currentLevel;
+        dx = 1; dy = 0;
+        overlay.style.display = 'none';
+        gameRunning = true;
+        
+        if(gameLoop) clearInterval(gameLoop);
+        gameLoop = setInterval(main, speed);
+    }
+
+    function main() {
+        if (didGameEnd()) { showGameOver(); return; }
+        clearCanvas();
+        drawFoods();
+        advanceSnake();
+        drawSnake();
+    }
+
+    function clearCanvas() {
+        ctx.fillStyle = "#16213e";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.03)";
+        for(let i=0; i<canvas.width; i+=gridSize) {
+            ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i, canvas.height); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(canvas.width, i); ctx.stroke();
+        }
+    }
+
+    function drawSnake() {
+        snake.forEach((part, index) => {
+            ctx.fillStyle = (index === 0) ? "#4ecca3" : "#45b293";
+            ctx.strokeStyle = "#1a1a2e";
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2, 4);
+            else ctx.rect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
+            ctx.fill(); ctx.stroke();
+        });
+    }
+
+    function advanceSnake() {
+        const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+        snake.unshift(head);
+        let foodEatenIndex = foods.findIndex(f => f.x === snake[0].x && f.y === snake[0].y);
+        if (foodEatenIndex !== -1) {
+            score += 500; // 500 Ar par nourriture mangée
+            scoreElement.innerText = score;
+            foods.splice(foodEatenIndex, 1);
+            if (foods.length === 0) {
+                gameRunning = false;
+                clearInterval(gameLoop);
+                showLevelComplete();
+            }
+        } else {
+            snake.pop();
+        }
+    }
+
+    function didGameEnd() {
+        if (snake[0].x < 0 || snake[0].x >= tileCount || snake[0].y < 0 || snake[0].y >= tileCount) return true;
+        for (let i = 4; i < snake.length; i++) {
+            if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
+        }
+        return false;
+    }
+
+    function generateFood() {
+        let newFood;
+        let isValid = false;
+        while(!isValid) {
+            newFood = {
+                x: Math.floor(Math.random() * tileCount),
+                y: Math.floor(Math.random() * tileCount)
+            };
+            let onSnake = snake.some(part => part.x === newFood.x && part.y === newFood.y);
+            let onFood = foods.some(f => f.x === newFood.x && f.y === newFood.y);
+            if(!onSnake && !onFood) isValid = true;
+        }
+        foods.push(newFood);
+    }
+
+    function drawFoods() {
+        foods.forEach(f => {
+            ctx.fillStyle = "#ffd700"; 
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#ffd700";
+            ctx.beginPath();
+            ctx.arc(f.x * gridSize + gridSize/2, f.y * gridSize + gridSize/2, gridSize/3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        });
+    }
+
+    function showLevelComplete() {
+        inputArea.style.display = 'none';
+        msgTitle.innerText = "Niveau terminé !";
+        msgTitle.className = "text-success";
+        msgBody.innerText = `Bravo ${username} !\nVous avez cumulé ${score} Ar.\nPrêt pour la suite ?`;
+        btnAction.innerText = "Récupérer la somme";
+        btnAction.onclick = () => startLevel(currentLevel + 1);
+        overlay.style.display = 'flex';
+    }
+
+    function showGameOver() {
+        gameRunning = false;
+        clearInterval(gameLoop);
+        inputArea.style.display = 'none';
+        msgTitle.innerText = "FIN DE PARTIE";
+        msgTitle.className = "text-danger";
+        msgBody.innerText = `Désolé ${username}.\nCagnotte finale : ${score} Ar`;
+        btnAction.innerText = "Recommencer";
+        btnAction.onclick = () => startLevel(1);
+        overlay.style.display = 'flex';
+    }
+
+    window.addEventListener('keydown', e => {
+        const k = e.key.toLowerCase();
+        if (k === 'arrowup' || k === 'z') setDir(0, -1);
+        if (k === 'arrowdown' || k === 's') setDir(0, 1);
+        if (k === 'arrowleft' || k === 'q') setDir(-1, 0);
+        if (k === 'arrowright' || k === 'd') setDir(1, 0);
+    });
+
+    clearCanvas();
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.textAlign = "center";
+    ctx.font = "16px Arial";
+    ctx.fillText("Entrez votre nom pour jouer", canvas.width/2, canvas.height/2);
+</script>
+</body>
 </html>
